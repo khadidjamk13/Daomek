@@ -1,44 +1,4 @@
-/*=============== GOOGLE FONTS ===============*/
 @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600&display=swap");
-
-/*=============== VARIABLES CSS ===============*/
-:root {
-  --header-height: 3.5rem;
- 
-    /*========== Colors ==========*/
-    /*Color mode HSL(hue, saturation, lightness)*/
-    --first-color: hsla(34, 12%, 46%, 0.849);
-    --title-color: hsl(230, 75%, 15%);
-    --text-color: hsl(230, 12%, 40%);
-    --body-color: hsl(230, 100%, 98%);
-    --container-color: hsl(230, 100%, 97%);
-    --border-color: hsl(72, 15%, 87%);
-  
-    /*========== Font and typography ==========*/
-    /*.5rem = 8px | 1rem = 16px ...*/
-    --body-font: "Syne", sans-serif;
-    --h2-font-size: 1.25rem;
-    --normal-font-size: .938rem;
-  
-    /*========== Font weight ==========*/
-    --font-regular: 400;
-    --font-medium: 500;
-    --font-semi-bold: 600;
-  
-    /*========== z index ==========*/
-    --z-fixed: 100;
-    --z-modal: 1000;
-  }
-  
-  /*========== Responsive typography ==========*/
-  @media screen and (min-width: 1023px) {
-    :root {
-      --h2-font-size: 1.5rem;
-      --normal-font-size: 1rem;
-    }
-  }
-  
-  /*=============== BASE ===============*/
   * {
     box-sizing: border-box;
     padding: 0;
@@ -52,13 +12,13 @@
 body,
 input,
 button {
-  font-family: var(--body-font);
-  font-size: var(--normal-font-size);
+  font-family: "Syne", sans-serif;
+  font-size: .938rem;
 }
 
 body {
-  background-color: var(--body-color);
-  color: var(--text-color);
+  background-color: hsl(230, 100%, 98%);
+  color: hsl(230, 12%, 40%);
 }
 
 input,
@@ -79,10 +39,10 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
+  width: 80%;
 }
-  /*=============== REUSABLE CSS CLASSES ===============*/
 .container {
-    max-width: 1120px;
+    max-width: 1720px;
     margin-inline: 1.5rem;
   }
   
@@ -91,23 +51,6 @@ img {
     height: 100vh;
   }
   
-  .search,
-  /*.login {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: var(--z-modal);
-    background-color: hsla(230, 75%, 15%, .1);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px); /* For safari 
-    padding: 8rem 1.5rem 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .4s;
-  }*/
-/*=============== HEADER & NAV ===============*/
 .header {
     position: fixed;
     top: 0;
@@ -115,19 +58,23 @@ img {
     width: 100%;
     background-color: #eeeee7;
     box-shadow: 0 2px 16px hsla(230, 75%, 32%, .15);
-    z-index: var(--z-fixed);
+    z-index: 100;
   }
   
   .nav {
-    height: var(--header-height);
+    height: 3.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    padding: 10px 10%;
+    display: flex;
+    position: relative;
   }
   
   .nav__logo {
-    color: var(--title-color);
-    font-weight: var(--font-semi-bold);
+    color: hsl(230, 75%, 15%);
+    font-weight: 600;
     transition: color .4s;
   }
   
@@ -141,13 +88,13 @@ img {
   .nav__toggle, 
   .nav__close {
     font-size: 1.25rem;
-    color: var(--title-color);
+    color: hsl(230, 75%, 15%);
     cursor: pointer;
     transition: color .4s;
   }
   
   :is(.nav__logo, .nav__login, .nav__toggle, .nav__link):hover {
-    color: var(--first-color);
+    color: hsla(34, 12%, 46%, 0.849);
   }
   
   /* Navigation for mobile devices */
@@ -156,11 +103,14 @@ img {
       position: fixed;
       top: -100%;
       left: 0;
-      background-color: var(--body-color);
+      background-color: hsl(230, 100%, 98%);
       box-shadow: 0 8px 16px hsla(230, 75%, 32%, .15);
       width: 100%;
       padding-block: 4.5rem 4rem;
       transition: top .4s;
+    }
+    img{
+      width: 50%;
     }
   }
   
@@ -172,8 +122,8 @@ img {
   }
   
   .nav__link {
-    color: var(--title-color);
-    font-weight: var(--font-semi-bold);
+    color: hsl(230, 75%, 15%);
+    font-weight: 600;
     transition: color .4s;
   }
   
@@ -210,7 +160,7 @@ img {
   /* For large devices */
   @media screen and (min-width: 1023px) {
     .nav {
-      height: calc(var(--header-height) + 2rem);
+      height: calc(3.5rem + 2rem);
       column-gap: 3rem;
     }
     .nav__close, 
@@ -224,10 +174,6 @@ img {
       flex-direction: row;
       column-gap: 3rem;
     }
-  
-    /*.login__form {
-      padding: 3rem 2rem 3.5rem;
-    }*/
   }
   
   @media screen and (min-width: 1150px) {
@@ -235,3 +181,114 @@ img {
       margin-inline: auto;
     }
   }
+.user-pic{
+   width:45px;
+   height: 45px;
+   border-radius:50%;
+   cursor: pointer;
+   margin-left:30px;
+   object-fit:cover;
+
+}
+.sub-menu-wrap{
+   position: absolute;
+   top:100%;
+   right:10%;
+   width:320px;
+   max-height:0px;
+   overflow:hidden;
+   transition: max-height 0.5s;
+
+}
+.sub-menu-wrap.open-menu {
+max-height: 400px;
+}
+.sub-menu{
+   background: #fff;
+   padding: 20px;
+   margin:10px;
+}
+.user-info{
+   display: flex;
+   align-items: center;
+}
+.user-info h3{
+   font-weight:500;
+}
+.user-info img {
+  width: 60px;
+  height: 60px; 
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+}
+
+.sub-menu hr{
+   border: 0;
+   height: 1px;
+   width: 100%;
+   background: #ccc;
+   margin: 15px 0 10px;
+}
+.sub-menu-link{
+   display: flex;
+   align-items: center;
+   text-decoration: none;
+   color: #525252;
+   margin: 12px 0;
+}
+.sub-menu-link p{
+   width:100%;
+}
+.sub-menu-link img{
+   width: 40px;
+   background: #e5e5e5;
+   border-radius: 50%;
+   padding: 8px;
+   margin-right: 15px;
+}
+.sub-menu-link span {
+font-size: 22px;
+transition: transform 0.5s;
+}
+
+.sub-menu-link:hover span {
+transform: translateX(5px);
+}
+
+.sub-menu-link:hover p {
+font-weight: 600;
+}
+.btn_publier {
+ background-color: transparent;
+ border: 2px solid #1A1A1A;
+ border-radius: 10px;
+ box-sizing: border-box;
+ color: #3B3B3B;
+ font-size: .938rem;
+ font-weight: 600;
+ margin: 0;
+ padding: 16px 30px;
+ min-height: 40px;
+ min-width: 135px;
+ text-align: center;
+ width: auto;
+}
+
+
+ 
+ .btn_publier:disabled {
+     pointer-events: none;
+ }
+ 
+ .btn_publier:hover {
+     color: #fff;
+     background-color: #1A1A1A;
+     box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+     transform: translateY(-2px);
+ }
+ 
+ .btn_publier:active {
+     box-shadow: none;
+     transform: translateY(0);
+ }

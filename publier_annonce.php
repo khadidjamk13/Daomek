@@ -190,7 +190,7 @@ if (isset($_POST['publier_annonce'])) {
         <div class="formbold-main-wrapper">
             <div class="formbold-form-wrapper">
                 <h3 class="titre">Publier une Annonce</h3>
-                <form method="POST" action="publier_annonce.php" class="container" enctype="multipart/form-data">
+                <form method="POST" action="publier_annonce.php" class="pub-container" enctype="multipart/form-data">
                     <input type="hidden" id="uploadedFiles" name="uploadedFiles" value="">
                     <div class="formbold-mb-3">
                         <label for="titre" class="formbold-form-label">Titre</label>

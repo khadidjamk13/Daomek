@@ -34,57 +34,10 @@ $result_mes_annonces = mysqli_query($con, $sql_mes_annonces);
     <link rel="stylesheet" href="nav.css">
     <link rel="stylesheet" href="acceuil.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <style>
-    h1{
-      text-align: center;
-    }
-    /*
-    .success-message {
-      background-color: #dff0d8; 
-      color: #3c763d; 
-      padding: 5px; 
-      border: 1px solid #3c763d; 
-      text-align: left;
-      margin: 10px 0; 
-      border-radius: 3px; 
-      float: left; 
-      position: relative; 
-    }
-
-
-    .close {
-      position: absolute; 
-      top: 2px;
-      right: 5px; 
-      color: #3c763d; 
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .close:hover {
-      color: #a94442; 
-    }
-    */
-
-
-  </style>
 </head>
 <body>
   <?php include 'navbar_loggedin.php'; ?>
   <h1 class="header_title">Mes Annonces</h1>
-  <!--?php
-    // Check for a success message
-    $delete_success = isset($_GET['delete_success']) ? (int) $_GET['delete_success'] : 0;
-    // Display the success message if delete was successful
-    if ($delete_success === 1) {
-      echo '
-      <div class="success-message" id="success-message">
-          L\'annonce a été supprimée avec succès!
-          <span class="close" onclick="closeSuccessMessage()">&times;</span>
-      </div>
-      ';
-  }
-  ?-->
   <div class="announcements">
     <br>
     <?php
@@ -152,35 +105,7 @@ $result_mes_annonces = mysqli_query($con, $sql_mes_annonces);
     }
     ?>
   </div>
-  <div id="marg"></div>
-
-<footer class="footer">
-    <div class="waves">
-      <div class="wave" id="wave1"></div>
-      <div class="wave" id="wave2"></div>
-      <div class="wave" id="wave3"></div>
-      <div class="wave" id="wave4"></div>
-    </div>
-  <div class="col">
-      <h3>À propos du site</h3>
-      <P>L'hebdo immobilier est un site spécialisé dans la publication de petites annonces immobilières en Algérie entre particuliers et professionnels</P>
-  </div>
-  <div class="col">
-      <h3>Contact info</h3>
-      <a href="mailto:propriété.par@gmail.com">propriété.par@gmail.com</a><br/>
-      <p> 00213-66-66-66</p> 
-  </div>
-  <div class="col">
-      <h3>Information</h3>
-      <p>Ajouter une annonce 
-      Qui sommes-nous 
-      Contactez-nous 
-      Terms et conditions 
-      Annuaire Agences Mon Compte
-    </p>
-  </div>
-    <p>&copy;2024  | All Rights Reserved</p>
-</footer>
+  <?php include'footer.php';?>
 <script>
     document.querySelectorAll('.slider').forEach(slider => {
       const container = slider.querySelector('.slider-container');
@@ -231,14 +156,6 @@ $result_mes_annonces = mysqli_query($con, $sql_mes_annonces);
     window.location.href = `delete_annonce.php?id=${announcementId}`;
   }
 }
-// Function to manually close the success message
-//function closeSuccessMessage() {
-    //const message = document.getElementById("success-message");
-    //message.style.display = 'none';
-//}
-
-// Automatically hide the success message after a few seconds
-//setTimeout(closeSuccessMessage, 10000); // Hide after 5 seconds
 
 </script>
 </body>

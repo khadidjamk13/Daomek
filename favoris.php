@@ -29,9 +29,7 @@ $result_announcements = mysqli_query($con, $sql_mes_annonces);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="nav.css">
     <link rel="stylesheet" href="annonce.css">
-    <link rel="stylesheet" href="footer.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script>function removeFromFavorites(id_p, id_f) {
   if (confirm("Are you sure you want to remove this favorite?")) {
@@ -107,34 +105,7 @@ $result_announcements = mysqli_query($con, $sql_mes_annonces);
     }
     ?>
   </div>
-    <div id="marg"></div>
-
-<footer class="footer">
-    <div class="waves">
-      <div class="wave" id="wave1"></div>
-      <div class="wave" id="wave2"></div>
-      <div class="wave" id="wave3"></div>
-      <div class="wave" id="wave4"></div>
-    </div>
-  <div class="col">
-      <h3>À propos du site</h3>
-      <P>L'hebdo immobilier est un site spécialisé dans la publication de petites annonces immobilières en Algérie entre particuliers et professionnels</P>
-  </div>
-  <div class="col">
-      <h3>Contact info</h3><br>
-      <a class="email" href="mailto:propriété.par@gmail.com">propriété.par@gmail.com</a><br/>
-      <p> 00213-66-66-66</p> 
-  </div>
-  <div class="col">
-      <h3>Information</h3>
-      <p>Ajouter une annonce 
-      Qui sommes-nous 
-      Contactez-nous 
-      Terms et conditions 
-      Annuaire Agences Mon Compte
-    </p>
-  </div>
-    <p>&copy;2024  | All Rights Reserved</p>
+<?php include'footer.php'; ?>
 </footer>
 <script>
     document.querySelectorAll('.slider').forEach(slider => {

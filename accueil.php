@@ -186,17 +186,13 @@ $result_announcements = mysqli_query($con, $sql_announcements);
           echo '<div class="content">';
           echo '<div class="price">';
           echo '<h3>' . $row['prix'] . ' DA</h3>';
-          if (!isset($_SESSION['user_id'])) {
-
+          if (!isset($_SESSION['id'])) {
             // Si l'utilisateur n'est pas connecté, afficher un message d'alerte lorsqu'il clique sur le lien
-
             echo '<a href="#" onclick="alert(\'You have to log in first.\');" class=" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
-          } else {
-
+        } else {
             // Si l'utilisateur est connecté, rediriger vers save_to_favorites.php lorsqu'il clique sur le lien
-
-            echo '<a href="save_to_favorites.php?id=' . $row['id_p'] . '" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
-          }
+            echo '<a href="save_to_favorites.php?id=' . $row['id_p'] . '" class="fas fa-heart"></a>';
+        }
 
           echo '<a href="#" class="fas fa-phone"></a>';
           echo '</div>';
@@ -231,88 +227,136 @@ $result_announcements = mysqli_query($con, $sql_announcements);
     <div class="pagination"></div>
 
   </div>
-
-
   <?php include 'footer.php' ?>
   <script>
-  document.addEventListener('DOMContentLoaded', function () {
-  const slider = document.querySelector('.announcements-slider');
-  const announcements = document.querySelector('.announcements');
-  const prevButton = slider.querySelector('.prevv');
-  const nextButton = slider.querySelector('.nextt');
-  const pagination = slider.querySelector('.pagination');
-
+document.addEventListener('DOMContentLoaded', function () {
+  const announcementsSlider = document.querySelector('.announcements-slider');
+  const announcements = announcementsSlider.querySelector('.announcements');
+  const prevButton = announcementsSlider.querySelector('.prevv');
+  const nextButton = announcementsSlider.querySelector('.nextt');
+  const pagination = announcementsSlider.querySelector('.pagination');
+  const itemsPerPage = 3; 
   let currentIndex = 0;
-  const announcementWidth = announcements.firstElementChild.offsetWidth + 10; // Width of each announcement card + margin-right
   const announcementCount = announcements.children.length;
-  const pageCount = Math.ceil(announcementCount / 3);
+  const pageCount = Math.ceil(announcementCount / itemsPerPage);
 
-  // Show the initial set of announcements (first 3)
-  showAnnouncements();
-  createPaginationDots();
+  // Function to toggle visibility of "Prev" and "Next" buttons
+  const toggleButtonVisibility = () => {
+    prevButton.style.display = currentIndex === 0 ? 'none' : 'block';
+    nextButton.style.display = currentIndex >= (pageCount - 1) ? 'none' : 'block';
+  };
 
-  // Function to show the current set of announcements
-  function showAnnouncements() {
+  // Function to show the appropriate announcements based on current index
+  const showAnnouncements = () => {
     for (let i = 0; i < announcementCount; i++) {
-      announcements.children[i].style.display = i >= currentIndex && i < currentIndex + 3 ? 'block' : 'none';
+      announcements.children[i].style.display = (i >= currentIndex * itemsPerPage && i < (currentIndex + 1) * itemsPerPage) ? 'block' : 'none';
     }
     toggleButtonVisibility();
     updatePagination();
-  }
+  };
 
-  // Function to toggle button visibility based on current index
-  function toggleButtonVisibility() {
-    prevButton.style.display = currentIndex === 0 ? 'none' : 'block';
-    nextButton.style.display = currentIndex + 3 >= announcementCount ? 'none' : 'block';
-  }
-
-  // Function to create pagination dots
-  function createPaginationDots() {
+  // Function to create pagination dots for the announcements slider
+  const createPaginationDots = () => {
+    pagination.innerHTML = ''; // Clear existing dots
     for (let i = 0; i < pageCount; i++) {
       const dot = document.createElement('span');
       dot.classList.add('dot');
-      if (i === 0) {
+      if (i === currentIndex) {
         dot.classList.add('active');
       }
       pagination.appendChild(dot);
     }
-  }
+  };
 
-  // Function to update pagination dots based on the current index
-  function updatePagination() {
-    const activeDotIndex = Math.floor(currentIndex / 3);
+  // Function to update the active dot in the pagination
+  const updatePagination = () => {
     const dots = pagination.querySelectorAll('.dot');
     dots.forEach((dot, index) => {
-      dot.classList.toggle('active', index === activeDotIndex);
+      if (index === currentIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
     });
-  }
+  };
 
-  // Event listener for the previous button
+  // Initialize the announcements and pagination
+  showAnnouncements();
+  createPaginationDots();
+
+  // Handle the previous button click for the group slider
   prevButton.addEventListener('click', () => {
     if (currentIndex > 0) {
-      currentIndex -= 3; // Move back by 3
+      currentIndex -= 1; // Go back one group
       showAnnouncements();
     }
   });
 
-  // Event listener for the next button
+  // Handle the next button click for the group slider
   nextButton.addEventListener('click', () => {
-    if (currentIndex + 3 < announcementCount) {
-      currentIndex += 3; // Move forward by 3
+    if (currentIndex < (pageCount - 1)) {
+      currentIndex += 1; // Move to the next group
       showAnnouncements();
     }
   });
 
-  // Event listeners for pagination dots
+  // Handle pagination dot clicks to navigate through announcements
   pagination.addEventListener('click', (event) => {
     if (event.target.classList.contains('dot')) {
       const dotIndex = Array.from(pagination.children).indexOf(event.target);
-      currentIndex = dotIndex * 3;
+      currentIndex = dotIndex;
       showAnnouncements();
     }
   });
 });
-</script>
+
+// Slider for announcement images
+document.querySelectorAll('.slider').forEach(slider => {
+  const container = slider.querySelector('.slider-container');
+  const prevButton = slider.querySelector('.prev');
+  const nextButton = slider.querySelector('.next');
+  let currentImageIndex = 0; // Index for navigating between images within each announcement
+
+  // Function to show the correct image
+  const showImage = (index) => {
+    const slides = container.querySelectorAll('img');
+    slides.forEach((slide, i) => {
+      slide.style.display = i === index ? 'block' : 'none';
+    });
+  };
+
+  // Update the initial state
+  showImage(currentImageIndex);
+
+  // Function to control the visibility of navigation buttons in the images slider
+  const toggleImageButtonVisibility = () => {
+    const slideCount = container.children.length;
+    prevButton.style.display = currentImageIndex === 0 ? 'none' : 'block';
+    nextButton.style.display = currentImageIndex === (slideCount - 1) ? 'none' : 'block';
+  };
+
+  toggleImageButtonVisibility();
+
+  // Navigation logic for the image slider
+  prevButton.addEventListener('click', () => {
+    if (currentImageIndex > 0) {
+      currentImageIndex -= 1;
+      showImage(currentImageIndex);
+      toggleImageButtonVisibility();
+    }
+  });
+
+  nextButton.addEventListener('click', () => {
+    if (currentImageIndex < (container.children.length - 1)) {
+      currentImageIndex += 1;
+      showImage(currentImageIndex);
+      toggleImageButtonVisibility();
+    }
+  });
+});
+
+  </script>
+
 
 </body>
 

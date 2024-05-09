@@ -99,7 +99,7 @@ body {
     line-height: 1.5;
 }
 
-.container {
+.pub-container {
     background-color: white;
 }
 
@@ -111,7 +111,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 48px;
+    padding: 170px;
 }
 
 .formbold-form-wrapper {
