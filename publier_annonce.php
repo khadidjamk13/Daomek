@@ -3,20 +3,18 @@ require 'connection.php';
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-// Redirect user to login page if not logged in
 if (!isset($_SESSION['id'])) {
     $_SESSION['msg'] = "You have to log in first";
-    header('location: login.php');
-    exit(); // Stop further execution
+    header('location: accueil.php');
+    exit(); 
 }
 
-// Initialize errors array
+
 $errors = array();
 $id_agence=$_SESSION['id'];
 if (isset($_POST['publier_annonce'])) {
-    // Retrieve form data
     $titre = $_POST['titre'];
-    $description = mysqli_real_escape_string($con, $_POST['description']); // Escape special characters
+    $description = mysqli_real_escape_string($con, $_POST['description']);
     $id_b = $_POST['id_b'];
     $id_o = $_POST['id_o'];
     $prix = $_POST['prix'];
@@ -25,11 +23,10 @@ if (isset($_POST['publier_annonce'])) {
     $id_w = $_POST['id_w'];
     $emplacement = $_POST['emplacement'];
 
-    // Insert into `proprietes` table
     $insert_prop_query = "INSERT INTO `proprietes`(`titre`, `description`, `id_b`, `id_o`, `prix`, `piece`, `superficie`, `id_w`, `emplacement`,`id_agence`) 
                           VALUES ('$titre', '$description', '$id_b', '$id_o', '$prix', '$piece', '$superficie', '$id_w', '$emplacement','$id_agence')";
     mysqli_query($con, $insert_prop_query);
-    $id_p = mysqli_insert_id($con); // Get the auto-generated ID
+    $id_p = mysqli_insert_id($con); 
 
     // Check if files were uploaded
     if (isset($_FILES['image'])) {
@@ -79,22 +76,7 @@ if (isset($_POST['publier_annonce'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publier Annonce</title>
     <link rel="stylesheet" href="form.css">
-    <style>
-        .upload-area {
-	margin-top: 1.25rem;
-	border: none;
-	background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23ccc' stroke-width='3' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-	background-color: transparent;
-	padding: 3rem;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	&:hover, &:focus {
-		background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23605941' stroke-width='3' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-	}
-}
-    </style>
+
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             console.log("Page loaded");

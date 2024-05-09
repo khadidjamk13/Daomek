@@ -134,12 +134,12 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <header class="header" id="header">
         <nav class="nav container">
-            <a href="accueil.php" class="nav__logo">Propriete Parfait</a>
+            <a href="accueil.php" class="nav__logo"><img src="logo.png" alt=""></a>
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="accueil.php" class="nav__link">Acceuil</a></li>
                     <li class="nav__item"><a href="annonce.php" class="nav__link">Annonces</a></li>
-                    <li class="nav__item"><a href="annonce.php" class="nav__link">Agences</a></li>
+                    <li class="nav__item"><a href="agences.php" class="nav__link">Agences</a></li>
                 </ul>
                 <div class="nav__close" id="nav-close">
                     <i class="ri-close-line"></i>

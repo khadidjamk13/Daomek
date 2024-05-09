@@ -53,230 +53,266 @@ $result_announcements = mysqli_query($con, $sql_announcements);
 
     <form action="cherche.php" method="post">
 
-    <label for="">À la recherche de</label>
+      <label for="">À la recherche de</label>
 
-    <select name="type_b" id="type_b">
+      <select name="type_b" id="type_b">
 
-      <option value=""> </option>
+        <option value=""> </option>
 
-      <?php
+        <?php
 
-      $sql_bien = "SELECT type_b FROM bien";
+        $sql_bien = "SELECT type_b FROM bien";
 
-      $result_bien = mysqli_query($con, $sql_bien);
+        $result_bien = mysqli_query($con, $sql_bien);
 
-      if ($result_bien->num_rows > 0) {
+        if ($result_bien->num_rows > 0) {
 
-        while ($row = $result_bien->fetch_assoc()) {
+          while ($row = $result_bien->fetch_assoc()) {
 
-          echo "<option value='" . $row["type_b"] . "'>" . $row["type_b"] . "</option>";
+            echo "<option value='" . $row["type_b"] . "'>" . $row["type_b"] . "</option>";
+          }
+        } else {
 
+          echo "0 résultats";
         }
 
-      } else {
+        ?>
 
-        echo "0 résultats";
-
-      }
-
-      ?>
-
-    </select>
+      </select>
 
 
 
-    <label for="">Type de l'opération</label>
+      <label for="">Type de l'opération</label>
 
-    <select name="type_o" id="type_o">
+      <select name="type_o" id="type_o">
 
-      <option value=""> </option>
+        <option value=""> </option>
 
-      <?php
+        <?php
 
-      $sql_op = "SELECT type_o FROM operation";
+        $sql_op = "SELECT type_o FROM operation";
 
-      $result_op = mysqli_query($con, $sql_op);
+        $result_op = mysqli_query($con, $sql_op);
 
-      if ($result_op->num_rows > 0) {
+        if ($result_op->num_rows > 0) {
 
-        while ($row = $result_op->fetch_assoc()) {
+          while ($row = $result_op->fetch_assoc()) {
 
-          echo "<option value='" . $row["type_o"] . "'>" . $row["type_o"] . "</option>";
+            echo "<option value='" . $row["type_o"] . "'>" . $row["type_o"] . "</option>";
+          }
+        } else {
 
-        }
+          echo "0 résultats";
+        } ?>
 
-      } else {
+      </select>
 
-        echo "0 résultats";
+      <label for="">wilaya</label>
 
-      } ?>
+      <select name="wilaya" id="wilaya">
 
-    </select>
+        <option value=""> </option>
 
-    <label for="">wilaya</label>
+        <?php
 
-    <select name="wilaya" id="wilaya">
+        $sql_wilayas = "SELECT nom_w FROM wilaya";
 
-      <option value=""> </option>
+        $result_wilayas = mysqli_query($con, $sql_wilayas);
 
-      <?php
+        if ($result_wilayas->num_rows > 0) {
 
-      $sql_wilayas = "SELECT nom_w FROM wilaya";
+          while ($row = $result_wilayas->fetch_assoc()) {
 
-      $result_wilayas = mysqli_query($con, $sql_wilayas);
+            echo "<option value='" . $row["nom_w"] . "'>" . $row["nom_w"] . "</option>";
+          }
+        } else {
 
-      if ($result_wilayas->num_rows > 0) {
+          echo "0 résultats";
+        } ?>
 
-        while ($row = $result_wilayas->fetch_assoc()) {
+      </select>
 
-          echo "<option value='" . $row["nom_w"] . "'>" . $row["nom_w"] . "</option>";
+      <label for="">Dimension</label>
 
-        }
+      <input type="text" id="dimension" name="dimension">
 
-      } else {
+      <label for="">prix</label>
 
-        echo "0 résultats";
+      <input type="text" id="prix" name="prix">
 
-      } ?>
-
-    </select>
-
-    <label for="">Dimension</label>
-
-    <input type="text" id="dimension" name="dimension">
-
-    <label for="">prix</label>
-
-    <input type="text" id="prix" name="prix">
-
-    <input type="submit" name="cherche" value="rechercher">
+      <input type="submit" name="cherche" value="rechercher">
 
     </form>
   </div>
-  <div class="announcements">
-    <?php
-    // Check if there are announcements
-    if (mysqli_num_rows($result_announcements) > 0) {
-      // Loop through each announcement
-      while ($row = mysqli_fetch_assoc($result_announcements)) {
-        // Display announcement details
-        echo '<div class="announcement">';
+
+  <div class="announcements-slider">
+    <div class="announcements">
+      <?php
+      // Check if there are announcements
+      if (mysqli_num_rows($result_announcements) > 0) {
+        // Loop through each announcement
+        while ($row = mysqli_fetch_assoc($result_announcements)) {
+          // Display announcement details
+          echo '<div class="announcement">';
 
           // Start slider container for current announcement
           echo '<div class="slider">';
 
-            // Navigation Arrows 
-            echo '<button class="prev"><i class="fas fa-chevron-left"></i></button>';
-            echo '<button class="next"><i class="fas fa-chevron-right"></i></button>';
+          // Navigation Arrows 
+          echo '<button class="prev"><i class="fas fa-chevron-left"></i></button>';
+          echo '<button class="next"><i class="fas fa-chevron-right"></i></button>';
 
-            // Add a container for slider images
-            echo '<div class="slider-container">';
+          // Add a container for slider images
+          echo '<div class="slider-container">';
 
-              // Explode image paths into an array
-              $image_paths = explode(",", $row['image_paths']);
+          // Explode image paths into an array
+          $image_paths = explode(",", $row['image_paths']);
 
-              // Check if there are images for the current announcement
-              if (!empty($image_paths)) {
-                // Loop through each image path
-                foreach ($image_paths as $image_path) {
-                  // Display image in the slider
-                  echo '<img src="' . $image_path . '" alt="Announcement Image">';
-                }
-              }
+          // Check if there are images for the current announcement
+          if (!empty($image_paths)) {
+            // Loop through each image path
+            foreach ($image_paths as $image_path) {
+              // Display image in the slider
+              echo '<img src="' . $image_path . '" alt="Announcement Image">';
+            }
+          }
 
-            // Close the slider container
-            echo '</div>';
+          // Close the slider container
+          echo '</div>';
 
           // End slider container for current announcement
           echo '</div>';
 
           echo '<div class="content">';
-            echo '<div class="price">';
-              echo '<h3>' . $row['prix'] . ' DA</h3>';
-              if (!isset($_SESSION['user_id'])) {
+          echo '<div class="price">';
+          echo '<h3>' . $row['prix'] . ' DA</h3>';
+          if (!isset($_SESSION['user_id'])) {
 
-                // Si l'utilisateur n'est pas connecté, afficher un message d'alerte lorsqu'il clique sur le lien
+            // Si l'utilisateur n'est pas connecté, afficher un message d'alerte lorsqu'il clique sur le lien
 
-                echo '<a href="#" onclick="alert(\'You have to log in first.\');" class=" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
+            echo '<a href="#" onclick="alert(\'You have to log in first.\');" class=" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
+          } else {
 
-            } else {
+            // Si l'utilisateur est connecté, rediriger vers save_to_favorites.php lorsqu'il clique sur le lien
 
-                // Si l'utilisateur est connecté, rediriger vers save_to_favorites.php lorsqu'il clique sur le lien
+            echo '<a href="save_to_favorites.php?id=' . $row['id_p'] . '" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
+          }
 
-                echo '<a href="save_to_favorites.php?id=' . $row['id_p'] . '" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
-
-            }
-
-                         echo '<a href="#" class="fas fa-phone"></a>';
-            echo '</div>';
-          
-            echo '<div class="location">';
-              echo '<h3>' . $row['titre'] . '</h3>';
-              echo '<p>' . $row['emplacement'] . '</p>';
-            echo '</div>';
-
-            echo '<div class="details">';
-              // Continue displaying announcement details
-              /*echo '<p>' . $row['description'] . '</p>';*/
-              echo '<a href="announcement_details.php?id=' . $row['id_p'] . '" class= "btn">Voir plus de détails</a>';
-            echo '</div>';
-            
+          echo '<a href="#" class="fas fa-phone"></a>';
           echo '</div>';
 
-          
+          echo '<div class="location">';
+          echo '<h3>' . $row['titre'] . '</h3>';
+          echo '<p>' . $row['emplacement'] . '</p>';
+          echo '</div>';
 
-        echo '</div>'; // Close announcement div
+          echo '<div class="details">';
+          // Continue displaying announcement details
+          /*echo '<p>' . $row['description'] . '</p>';*/
+          echo '<a href="announcement_details.php?id=' . $row['id_p'] . '" class= "btn">Voir plus de détails</a>';
+          echo '</div>';
+
+          echo '</div>';
+
+
+
+          echo '</div>'; // Close announcement div
+        }
+      } else {
+        echo '<p>Aucune annonce disponible pour le moment.</p>';
       }
-    } else {
-      echo '<p>Aucune annonce disponible pour le moment.</p>';
-    }
-    ?>
+      ?>
+    </div>
+
+    <button class="prevv"><i class="fas fa-chevron-left"></i></button>
+    <button class="nextt"><i class="fas fa-chevron-right"></i></button>
+
+    <!-- Pagination dots will be dynamically added here -->
+    <div class="pagination"></div>
+
   </div>
-  <?php include'footer.php' ?>
+
+
+  <?php include 'footer.php' ?>
   <script>
-    document.querySelectorAll('.slider').forEach(slider => {
-      const container = slider.querySelector('.slider-container');
-      const prevButton = slider.querySelector('.prev');
-      const nextButton = slider.querySelector('.next');
-      let currentIndex = 0;
+  document.addEventListener('DOMContentLoaded', function () {
+  const slider = document.querySelector('.announcements-slider');
+  const announcements = document.querySelector('.announcements');
+  const prevButton = slider.querySelector('.prevv');
+  const nextButton = slider.querySelector('.nextt');
+  const pagination = slider.querySelector('.pagination');
 
-      // Function to show the current slide
-      const showSlide = (index) => {
-        const slides = container.querySelectorAll('img');
-        slides.forEach((slide, i) => {
-          slide.style.display = i === index ? 'block' : 'none';
-        });
-      };
+  let currentIndex = 0;
+  const announcementWidth = announcements.firstElementChild.offsetWidth + 10; // Width of each announcement card + margin-right
+  const announcementCount = announcements.children.length;
+  const pageCount = Math.ceil(announcementCount / 3);
 
-      // Show the initial slide
-      showSlide(currentIndex);
+  // Show the initial set of announcements (first 3)
+  showAnnouncements();
+  createPaginationDots();
 
-      // Function to toggle button visibility based on current index
-      const toggleButtonVisibility = () => {
-        prevButton.style.display = currentIndex === 0 ? 'none' : 'block';
-        nextButton.style.display = currentIndex === container.children.length - 1 ? 'none' : 'block';
-      };
+  // Function to show the current set of announcements
+  function showAnnouncements() {
+    for (let i = 0; i < announcementCount; i++) {
+      announcements.children[i].style.display = i >= currentIndex && i < currentIndex + 3 ? 'block' : 'none';
+    }
+    toggleButtonVisibility();
+    updatePagination();
+  }
 
-      // Event listener for the previous button
-      prevButton.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + container.children.length) % container.children.length;
-        showSlide(currentIndex);
-        toggleButtonVisibility();
-      });
+  // Function to toggle button visibility based on current index
+  function toggleButtonVisibility() {
+    prevButton.style.display = currentIndex === 0 ? 'none' : 'block';
+    nextButton.style.display = currentIndex + 3 >= announcementCount ? 'none' : 'block';
+  }
 
-      // Event listener for the next button
-      nextButton.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % container.children.length;
-        showSlide(currentIndex);
-        toggleButtonVisibility();
-      });
+  // Function to create pagination dots
+  function createPaginationDots() {
+    for (let i = 0; i < pageCount; i++) {
+      const dot = document.createElement('span');
+      dot.classList.add('dot');
+      if (i === 0) {
+        dot.classList.add('active');
+      }
+      pagination.appendChild(dot);
+    }
+  }
 
-      // Hide the next button initially if there is only one image
-      toggleButtonVisibility();
+  // Function to update pagination dots based on the current index
+  function updatePagination() {
+    const activeDotIndex = Math.floor(currentIndex / 3);
+    const dots = pagination.querySelectorAll('.dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === activeDotIndex);
     });
+  }
 
-  </script>
+  // Event listener for the previous button
+  prevButton.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex -= 3; // Move back by 3
+      showAnnouncements();
+    }
+  });
 
+  // Event listener for the next button
+  nextButton.addEventListener('click', () => {
+    if (currentIndex + 3 < announcementCount) {
+      currentIndex += 3; // Move forward by 3
+      showAnnouncements();
+    }
+  });
+
+  // Event listeners for pagination dots
+  pagination.addEventListener('click', (event) => {
+    if (event.target.classList.contains('dot')) {
+      const dotIndex = Array.from(pagination.children).indexOf(event.target);
+      currentIndex = dotIndex * 3;
+      showAnnouncements();
+    }
+  });
+});
+</script>
 
 </body>
 
