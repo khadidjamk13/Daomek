@@ -1,9 +1,10 @@
 <?php
 session_start();
 include 'connection.php';
-
-$errors   = array();
 error_reporting(E_ALL);
+ini_set('display_errors', 1);
+$errors   = array();
+
 
 // Call the register() function if the register button is clicked
 if (isset($_POST['register'])) {
@@ -73,7 +74,7 @@ function register()
                     $errors[] = "Cette personne existe déjà.";
                 } else {
                     // Insert new user data into the database
-                    $sql = "INSERT INTO user (username,nom, prenom,email, password, date_naissance) VALUES ('$nom', '$prenom','$username', '$email', '$password', '$date_naissance')";
+                    $sql = "INSERT INTO user (nom, prenom,username,email, password, date_naissance) VALUES ('$nom', '$prenom','$username', '$email', '$password', '$date_naissance')";
                     if ($con->query($sql) === TRUE) {
                         // Get the ID of the newly created user
                         $id = $con->insert_id;

@@ -18,10 +18,14 @@ if (isset($_SESSION['id'])) {
         $row = $result->fetch_assoc();
         $photoProfilePath = $row['photo_profile']; // Path to the profile photo
         $username = $row['username'];
+        // If photo_profile is NULL or empty, use the default image
+        if (empty($photoProfilePath) || is_null($photoProfilePath)) {
+            $photoProfilePath = 'Images/userinfo/Default_pfp.png'; // Default profile photo
+        }
     } else {
-        $photoProfilePath = 'images/userinfo/Default_pfp.svg.png'; // Default image if not found
+        // If no user found, use the default image
+        $photoProfilePath = 'Images/userinfo/Default_pfp.png';
     }
-
     $stmt->close(); // Close the statement
 } else {
     echo "User session not set. Please log in."; // Error message if session not set

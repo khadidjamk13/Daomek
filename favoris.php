@@ -28,7 +28,7 @@ $result_announcements = mysqli_query($con, $sql_mes_annonces);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Favoris</title>
     <link rel="stylesheet" href="accueil.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
@@ -46,29 +46,26 @@ $result_announcements = mysqli_query($con, $sql_mes_annonces);
   </style>
 <script>
 function removeFromFavorites(id_p) {
-    fetch('remove_fav.php', {
-        method: 'POST', // Ensure POST method
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded', // Correct content type
-        },
-        body: `id_p=${id_p}`, // Send the correct parameter
-    })
-    .then(response => response.text())
-    .then(result => {
-        if (result.trim() === 'success') { // Handle success
-            const announcement = document.querySelector(`div[data-id="${id_p}"]`);
-            if (announcement) {
-                announcement.remove(); // Remove from DOM
-            }
-        } else {
-            alert('Error removing favorite.'); // Handle failure
-        }
-    })
-    .catch(error => {
-        console.error('AJAX Error:', error); // Log error
-        alert('An error occurred while removing the favorite.'); // Alert user
-    });
+  fetch('remove_fav.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `id_p=${id_p}`,
+  })
+  .then(response => response.text())
+  .then(result => {
+    if (result.trim() === 'success') {
+      window.location.reload();
+    } else {
+      alert('Failed to remove favorite.');
+    }
+  })
+  .catch(error => {
+    alert('An error occurred while removing the favorite.');
+  });
 }
+
 
 
 </script>
@@ -113,7 +110,7 @@ function removeFromFavorites(id_p) {
                 echo '<a href="#" onclick="alert(\'You have to log in first.\');" class=" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
             } else {
                 // Si l'utilisateur est connecté, rediriger vers save_to_favorites.php lorsqu'il clique sur le lien
-                echo '<a href="remove_fav.php?id=' . $row['id_p'] . '" class="fas fa-heart"></a>';
+                echo '<a href="#" onclick="removeFromFavorites(' . $row['id_p'] . '); return false;" class="fas fa-heart"></a>';
             }
             echo '</div>';
 

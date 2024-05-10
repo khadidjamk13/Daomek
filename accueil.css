@@ -294,8 +294,9 @@
 input[type="submit"] {
   background: #DEB887;;
   width:100px;
+  height: 40px;
   font-size:15px;
-  border-radius:2px;
+  border-radius:5px;
   border: #DEB887 2px solid;
 }
 input[type="text"] {
