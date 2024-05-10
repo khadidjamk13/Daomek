@@ -29,25 +29,49 @@ $result_announcements = mysqli_query($con, $sql_mes_annonces);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="annonce.css">
+    <link rel="stylesheet" href="accueil.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<script>function removeFromFavorites(id_p, id_f) {
-  if (confirm("Are you sure you want to remove this favorite?")) {
-    $.ajax({
-      type: "POST",
-      url: "remove_fav.php",
-      data: { id_p: id_p, id_f: id_f },
-      success: function(data) {
-        if (data === 'success') {
-          // Remove the favorite icon from the page
-          $('a[href*="' + id_p + '"]').remove();
+  <style>
+    .announcements{
+      margin-top:150px;
+    }
+    .announcements .announcement .content .price a {
+      background: #deb887;
+      color: #fff;
+    } 
+    .announcements .announcement .content .price a:hover {
+      color: #666;
+      background: #f7f7f7;
+    }
+  </style>
+<script>
+function removeFromFavorites(id_p) {
+    fetch('remove_fav.php', {
+        method: 'POST', // Ensure POST method
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded', // Correct content type
+        },
+        body: `id_p=${id_p}`, // Send the correct parameter
+    })
+    .then(response => response.text())
+    .then(result => {
+        if (result.trim() === 'success') { // Handle success
+            const announcement = document.querySelector(`div[data-id="${id_p}"]`);
+            if (announcement) {
+                announcement.remove(); // Remove from DOM
+            }
         } else {
-          alert('Error removing favorite.');
+            alert('Error removing favorite.'); // Handle failure
         }
-      }
+    })
+    .catch(error => {
+        console.error('AJAX Error:', error); // Log error
+        alert('An error occurred while removing the favorite.'); // Alert user
     });
-  }
-}</script>
+}
+
+
+</script>
 </head>
 <body>
   <?php include 'navbar_loggedin.php'; ?>
@@ -84,7 +108,6 @@ $result_announcements = mysqli_query($con, $sql_mes_annonces);
           echo '<div class="content">';
             echo '<div class="price">';
                echo '<h3>' . $row['prix'] . ' DA</h3>';
-            echo '</div>';
             if (!isset($_SESSION['id'])) {
                 // Si l'utilisateur n'est pas connecté, afficher un message d'alerte lorsqu'il clique sur le lien
                 echo '<a href="#" onclick="alert(\'You have to log in first.\');" class=" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
@@ -92,10 +115,16 @@ $result_announcements = mysqli_query($con, $sql_mes_annonces);
                 // Si l'utilisateur est connecté, rediriger vers save_to_favorites.php lorsqu'il clique sur le lien
                 echo '<a href="remove_fav.php?id=' . $row['id_p'] . '" class="fas fa-heart"></a>';
             }
+            echo '</div>';
 
             echo '<div class="location">';
                echo '<h3>' . $row['titre'] . '</h3>';
                echo '<p>' . $row['emplacement'] . '</p>';
+               echo '<div class="details">';
+              // Continue displaying announcement details
+              /*echo '<p>' . $row['description'] . '</p>';*/
+              echo '<a href="announcement_details.php?id=' . $row['id_p'] . '" class= "btn">Voir plus de détails</a>';
+            echo '</div>';
             echo '</div>';
           echo '</div>';
         echo '</div>'; // Close announcement div

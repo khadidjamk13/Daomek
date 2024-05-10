@@ -76,6 +76,7 @@ img {
     color: hsl(230, 75%, 15%);
     font-weight: 600;
     transition: color .4s;
+    width: 200px;
   }
   
   .nav__actions {

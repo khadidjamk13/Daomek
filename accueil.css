@@ -155,6 +155,15 @@
   background: #deb887;
   color: #fff;
 }
+.announcements .announcement .content .price a.is-favorite {
+  background: #deb887;
+  color: #fff;
+}
+
+.announcements .announcement .content .price a.is-favorite:hover {
+  background: #f7f7f7;
+  color: #666;
+}
 
 .announcements .announcement .content .location {
   padding: 0.8rem 0;

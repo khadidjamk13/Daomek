@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include 'connection.php';
@@ -44,7 +46,7 @@ if (isset($_SESSION['id'])) {
 <body>
       <header class="header" id="header">
         <nav class="nav container">
-        <a href="accueil.php" class="nav__logo"><img src="logo.png" alt="logo"></a>
+        <a href="accueil.php" class="nav__logo"><img src="Images/userinfo/logo.png" alt="logo"></a>
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="accueil.php" class="nav__link">Acceuil</a></li>

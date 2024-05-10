@@ -1,26 +1,64 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include 'connection.php';
-include 'navbar.php';
-// Fetch announcements with their corresponding images
+if (!isset($_SESSION['id'])) {
 $sql_announcements = "SELECT proprietes.*, GROUP_CONCAT(Images.path) AS image_paths
                       FROM proprietes 
                       LEFT JOIN Images ON proprietes.id_p = Images.id_p
                       GROUP BY proprietes.id_p 
                       ";
 $result_announcements = mysqli_query($con, $sql_announcements);
+}else{
+  $userId = $_SESSION['id'];
+  $sql_announcements = "SELECT proprietes.*, GROUP_CONCAT(Images.path) AS image_paths
+                      FROM proprietes 
+                      LEFT JOIN Images ON proprietes.id_p = Images.id_p
+                      WHERE 
+                        proprietes.id <> $userId
+                      GROUP BY proprietes.id_p 
+                      ";
+$result_announcements = mysqli_query($con, $sql_announcements);
+// Fetch user's favorites
+$sql_favorites = "SELECT id_p FROM favoris WHERE id = $userId";
+$result_favorites = mysqli_query($con, $sql_favorites);
+$user_favorites = array();
 
+if ($result_favorites->num_rows > 0) {
+    while ($row = $result_favorites->fetch_assoc()) {
+        $user_favorites[] = $row['id_p']; // Store the id_p values in an array
+    }
+}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="acceuil.css">
+  <link rel="stylesheet" href="accueil.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+<?php
+  // Start or resume the session
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
 
+  // Check if the user is logged in
+  if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
+    // User is logged in, include the navigation bar for logged-in users
+    include 'navbar_loggedin.php';
+  } else {
+    // User is not logged in, include the navigation bar for non-logged-in users
+    include 'navbar.php';
+  }
+  ?>
 <div class="recherche">
     <form action="cherche.php" method="post">
     <label for="">À la recherche de</label>
@@ -108,12 +146,13 @@ $result_announcements = mysqli_query($con, $sql_announcements);
           echo '<div class="content">';
             echo '<div class="price">';
               echo '<h3>' . $row['prix'] . ' DA</h3>';
-              if (!isset($_SESSION['user_id'])) {
-                // Si l'utilisateur n'est pas connecté, afficher un message d'alerte lorsqu'il clique sur le lien
-                echo '<a href="#" onclick="alert(\'You have to log in first.\');" class=" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
+              if (!isset($_SESSION['id'])) {
+                // Only one heart icon for non-logged-in users
+                echo '<a href="#" onclick="alert(\'You have to log in first.\');" class="fas fa-heart"></a>';
             } else {
-                // Si l'utilisateur est connecté, rediriger vers save_to_favorites.php lorsqu'il clique sur le lien
-                echo '<a href="save_to_favorites.php?id=' . $row['id_p'] . '" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
+                // Only one heart icon for logged-in users with favorite status
+                $is_favorite = in_array($row['id_p'], $user_favorites) ? 'is-favorite' : '';
+                echo '<a href="save_to_favorites.php?id=' . $row['id_p'] . '" class="fas fa-heart ' . $is_favorite . '"></a>';
             }
               echo '<a href="#" class="fas fa-phone"></a>';
             echo '</div>';

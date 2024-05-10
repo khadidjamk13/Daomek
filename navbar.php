@@ -134,7 +134,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <header class="header" id="header">
         <nav class="nav container">
-            <a href="accueil.php" class="nav__logo"><img src="logo.png" alt=""></a>
+        <a href="accueil.php" class="nav__logo"><img src="Images/userinfo/logo.png" alt="logo"></a>
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="accueil.php" class="nav__link">Acceuil</a></li>

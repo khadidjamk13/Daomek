@@ -2,31 +2,29 @@
 session_start();
 
 if (!isset($_SESSION['id'])) {
-    header('Location: login.php');
+    echo 'error'; // Return error if not logged in
     exit;
 }
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $property_id = $_GET['id'];
+if (isset($_POST['id_p']) && is_numeric($_POST['id_p'])) { // Expect POST parameter
+    $property_id = $_POST['id_p'];
 
     include 'connection.php';
 
     $user_id = $_SESSION['id'];
-    $sql = "INSERT INTO favoris (id, id_p) VALUES ($user_id, $property_id)";
 
-    if (mysqli_query($con, $sql)) {
-        $_SESSION['success'] = "Property added to favorites successfully!";
+    // Prepared statement to insert into 'favoris'
+    $stmt = $con->prepare("INSERT INTO favoris (id, id_p) VALUES (?, ?)");
+    $stmt->bind_param("ii", $user_id, $property_id);
+
+    if ($stmt->execute()) { // Return 'success' on successful insertion
+        echo 'success';
     } else {
-        $_SESSION['error'] = "Error: " . mysqli_error($con);
+        echo 'error'; // Return error on failure
     }
 
-    mysqli_close($con);
-
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit;
+    $stmt->close(); // Close prepared statement
 } else {
-    $_SESSION['error'] = "Invalid property ID!";
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit;
+    echo 'error'; // Return error if data is missing or invalid
 }
 ?>

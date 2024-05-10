@@ -1,16 +1,43 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include 'connection.php';
-
 mysqli_set_charset($con, "utf8");
-
+if (!isset($_SESSION['id'])) {
 $sql_announcements = "SELECT proprietes.*, GROUP_CONCAT(Images.path) AS image_paths
                       FROM proprietes 
                       LEFT JOIN Images ON proprietes.id_p = Images.id_p
                       GROUP BY proprietes.id_p 
                       ORDER BY proprietes.id_p DESC
                       LIMIT 9";
+$result_announcements = mysqli_query($con, $sql_announcements);}
+else {
+  $userId = $_SESSION['id'];
+
+  $sql_announcements = "SELECT proprietes.*, GROUP_CONCAT(Images.path) AS image_paths
+                      FROM proprietes 
+                      LEFT JOIN Images ON proprietes.id_p = Images.id_p
+                      WHERE 
+                        proprietes.id <> $userId
+                      GROUP BY proprietes.id_p 
+                      ORDER BY proprietes.id_p DESC
+                      LIMIT 9";
 $result_announcements = mysqli_query($con, $sql_announcements);
+
+// Fetch user's favorites
+$sql_favorites = "SELECT id_p FROM favoris WHERE id = $userId";
+$result_favorites = mysqli_query($con, $sql_favorites);
+$user_favorites = array();
+
+if ($result_favorites->num_rows > 0) {
+    while ($row = $result_favorites->fetch_assoc()) {
+        $user_favorites[] = $row['id_p']; // Store the id_p values in an array
+    }
+}
+}
 
 ?>
 
@@ -22,8 +49,7 @@ $result_announcements = mysqli_query($con, $sql_announcements);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="acceuil.css">
-
+  <link rel="stylesheet" href="accueil.css">
 </head>
 
 <body>
@@ -187,13 +213,13 @@ $result_announcements = mysqli_query($con, $sql_announcements);
           echo '<div class="price">';
           echo '<h3>' . $row['prix'] . ' DA</h3>';
           if (!isset($_SESSION['id'])) {
-            // Si l'utilisateur n'est pas connecté, afficher un message d'alerte lorsqu'il clique sur le lien
-            echo '<a href="#" onclick="alert(\'You have to log in first.\');" class=" class="fas fa-heart"><i class="fas fa-heart"></i></a>';
+            echo '<a href="#" onclick="alert(\'You have to log in first.\');" class="fas fa-heart"></a>';
         } else {
-            // Si l'utilisateur est connecté, rediriger vers save_to_favorites.php lorsqu'il clique sur le lien
-            echo '<a href="save_to_favorites.php?id=' . $row['id_p'] . '" class="fas fa-heart"></a>';
+            $is_favorite = in_array($row['id_p'], $user_favorites) ? 'is-favorite' : '';
+            $action_url = $is_favorite ? 'remove_fav.php' : 'save_to_favorites.php';
+        
+            echo '<a href="#" onclick="toggleFavorite(' . $row['id_p'] . ')" class="fas fa-heart ' . $is_favorite . '"></a>';
         }
-
           echo '<a href="#" class="fas fa-phone"></a>';
           echo '</div>';
 
@@ -229,6 +255,32 @@ $result_announcements = mysqli_query($con, $sql_announcements);
   </div>
   <?php include 'footer.php' ?>
   <script>
+    function toggleFavorite(id_p) {
+    const isFavorite = document.querySelector(`a[onclick="toggleFavorite(${id_p})"]`).classList.contains('is-favorite');
+    const url = isFavorite ? 'remove_fav.php' : 'save_to_favorites.php';
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `id_p=${id_p}`, // Ensure the correct parameter name
+    })
+    .then(response => response.text())
+    .then(result => {
+        if (result.trim() === 'success') { // Check for success
+            document.querySelector(`a[onclick="toggleFavorite(${id_p})"]`).classList.toggle('is-favorite');
+        } else {
+            alert('Failed to update favorites.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating favorites.');
+    });
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const announcementsSlider = document.querySelector('.announcements-slider');
   const announcements = announcementsSlider.querySelector('.announcements');
