@@ -1,3 +1,17 @@
+<?php 
+session_start();
+include 'connection.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+if (!isset($_SESSION['id']) || !isset($_SESSION['username'])) {
+  header("Location: accueil.php");
+  exit();
+}
+$id = $_SESSION['id'];
+$sql_profile = "SELECT * FROM user WHERE id = $id";
+$result_profile = mysqli_query($con, $sql_profile);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,17 +21,9 @@
 </head>
 <body>
 <?php
-  // Start or resume the session
-  if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-  }
-
-  // Check if the user is logged in
   if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
-    // User is logged in, include the navigation bar for logged-in users
     include 'navbar_loggedin.php';
   } else {
-    // User is not logged in, include the navigation bar for non-logged-in users
     include 'navbar.php';
   }
   ?>
