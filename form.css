@@ -120,6 +120,7 @@ body {
     width: 100%;
     background-color: #fffffd;
     padding: 40px;
+    border-radius: 5px;
 }
 
 .titre {
@@ -127,6 +128,7 @@ body {
     text-align: center;
     color: #605941;
     font-size:xx-large;
+    margin-top: 40px;
 }
 
 .formbold-form-input {

@@ -177,7 +177,8 @@ CREATE TABLE `user` (
   `prenom` varchar(30) NOT NULL,
   `email` varchar(230) NOT NULL,
   `password` varchar(60) NOT NULL,
-  `date_naissance` date NOT NULL
+  `date_naissance` date NOT NULL,
+    `photo_profile` varchar(230) NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
