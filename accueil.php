@@ -74,7 +74,7 @@ if ($result_favorites->num_rows > 0) {
       <h2 align="center" id="st">votre guide qui vous accompagne pour trouver votre maison</h2>
     </div>
   </div>
-
+<!--hello-->
   <div class="recherche">
 
     <form action="cherche.php" method="post">
